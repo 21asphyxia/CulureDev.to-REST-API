@@ -22,4 +22,3 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::apiResource('tags', TagController::class);
 Route::apiResource('categories', CategoryController::class);
-
