@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\TagController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -27,3 +29,7 @@ Route::controller(AuthController::class)->group(function () {
 Route::get('/test', function(){
    return "sdfghjkl";
 });
+
+Route::apiResource('tags', TagController::class);
+Route::apiResource('categories', CategoryController::class);
+
