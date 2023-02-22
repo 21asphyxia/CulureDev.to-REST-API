@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Cache\TagSet;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,7 +15,8 @@ class Article extends Model
         'content',
         'published_at',
         // 'user_id',
-        'category_id'
+        'category_id',
+        // 'tag_id'
     ];
 
     // public function user(){
@@ -24,4 +26,8 @@ class Article extends Model
     public function category(){
         return $this->belongsTo(Category::class);
     }
+
+    // public function tag(){
+    //     return $this->belongsToMany(Tag::class);
+    // }
 }

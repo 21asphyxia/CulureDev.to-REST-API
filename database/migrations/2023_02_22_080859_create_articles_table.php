@@ -18,6 +18,7 @@ return new class extends Migration
             $table->date('published_at');
 
             $table->foreignId('category_id')->references('id')->on('categories');
+            
             // $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use App\Http\Requests\StoreArticleRequest;
 use App\Http\Requests\UpdateArticleRequest;
+use App\Http\Resources\ArticleCollection;
+use App\Http\Resources\ArticleResource;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 
@@ -24,10 +26,7 @@ class ArticleController extends Controller
     {
         $articles = Article::orderBy('id')->get();
 
-        return response()->json([
-            'status' => 'success',
-            'articles' => $articles
-        ]);
+        return new ArticleCollection($articles);
     }
 
     /**
@@ -38,18 +37,18 @@ class ArticleController extends Controller
      */
     public function store(StoreArticleRequest $request)
     {
-        // $article = Article::create($request->all());
+        $article = Article::create($request->all());
 
         
-        $article = Article::create([
-            'title' => $request->title,
-            'content' => $request->content,
-            'published_at' => $request->published_at,
-            // 'author' => $request->author,
-            'category_id' => $request->category_id,
-            // 'user_id' => auth()->user()->id,
+        // $article = Article::create([
+        //     'title' => $request->title,
+        //     'content' => $request->content,
+        //     'published_at' => $request->published_at,
+        //     'category_id' => $request->category_id,
+        //     // 'tag_id' => $request->tag_id,
+        //     // 'user_id' => auth()->user()->id,
 
-        ]);
+        // ]);
 
         return response()->json([
             'status' => true,
