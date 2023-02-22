@@ -70,7 +70,7 @@ class ArticleController extends Controller
         if (!$article) {
             return response()->json(['message' => 'Article not found'], 404);
         }
-        return response()->json($article, 200);
+        return new ArticleResource($article);
     }
 
     /**

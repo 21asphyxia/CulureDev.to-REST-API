@@ -18,7 +18,9 @@ class ArticleResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'content' => $this->content,
-            'category' => new CategoryResource($this->category)
+            'category' => new CategoryResource($this->category),
+            'comment' => new CommentCollection($this->comments),
+            'tag' => new TagCollection($this->tags)
         ];
     }
 }

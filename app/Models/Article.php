@@ -27,7 +27,11 @@ class Article extends Model
         return $this->belongsTo(Category::class);
     }
 
-    // public function tag(){
-    //     return $this->belongsToMany(Tag::class);
-    // }
+    public function comments(){
+        return $this->hasMany(Comment::class , 'article_id');
+    }
+
+    public function tags(){
+        return $this->belongsToMany(Tag::class , 'article_tags');
+    }
 }
