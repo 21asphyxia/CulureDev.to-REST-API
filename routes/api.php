@@ -25,10 +25,9 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('register', 'register');
     Route::post('logout', 'logout');
     Route::post('refresh', 'refresh');
+    Route::post('update', 'update');
 });
-Route::get('/test', function(){
-   return "sdfghjkl";
-});
+
 
 Route::apiResource('tags', TagController::class);
 Route::apiResource('categories', CategoryController::class);
