@@ -44,19 +44,19 @@ class ArticleController extends Controller
             'title'       => $request->title,
             'content'     => $request->content,
             'category_id' => $request->category_id,
-            // 'tag_id'      => $request->tag_id,
             'user_id'     => auth()->user()->id,
 
         ]);
+
         $tags = $request->tags;
         $tag_ids = [];
-        
+
         foreach ($tags as $tag) {
             $tag_model = Tag::firstOrCreate(['name' => $tag]);
             $tag_ids[] = $tag_model->id;
         }
-        
-        $article->tags()->sync($tag_ids);
+
+        $article->tags()->attach($tag_ids);
 
         return response()->json([
             'status'  => true,
