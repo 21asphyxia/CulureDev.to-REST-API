@@ -90,4 +90,31 @@ class AuthController extends Controller
             ]
         ]);
     }
-}
+    public function update(Request $request){
+        $request->validate([
+            'name' => 'string|max:255',
+            'email' => 'string|email|max:255',
+            'password' => 'string|min:6',
+            
+        ]);
+        $user=$request->user();
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'role_id' => $request->role,
+            'password' => Hash::make($request->password),
+        ]);
+        $token = Auth::login($user);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'User updated successfully',
+            'user' => $user,
+            'authorisation' => [
+                'token' => $token,
+                'type' => 'bearer',
+            ]
+        ]);
+    }
+
+  }
+

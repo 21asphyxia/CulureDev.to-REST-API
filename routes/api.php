@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\TagController;
+use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\CommentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -25,11 +27,12 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('register', 'register');
     Route::post('logout', 'logout');
     Route::post('refresh', 'refresh');
+    Route::post('update', 'update');
 });
-Route::get('/test', function(){
-   return "sdfghjkl";
-});
+
 
 Route::apiResource('tags', TagController::class);
 Route::apiResource('categories', CategoryController::class);
+Route::apiResource('articles', ArticleController::class);
+Route::apiResource('comments', CommentController::class);
 
