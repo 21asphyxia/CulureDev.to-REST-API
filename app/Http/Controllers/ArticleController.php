@@ -51,9 +51,11 @@ class ArticleController extends Controller
         $tags = $request->tags;
         $tag_ids = [];
 
-        foreach ($tags as $tag) {
-            $tag_model = Tag::firstOrCreate(['name' => $tag]);
-            $tag_ids[] = $tag_model->id;
+        if (is_array($tags)) {
+            foreach ($tags as $tag) {
+                $tag_model = Tag::firstOrCreate(['name' => $tag]);
+                $tag_ids[] = $tag_model->id;
+            }
         }
 
         $article->tags()->attach($tag_ids);
