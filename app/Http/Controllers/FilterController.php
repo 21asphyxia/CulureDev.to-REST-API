@@ -8,16 +8,17 @@ use App\Models\Article;
 class FilterController extends Controller
 {
     public function filter(Request $request){
-        $articl_query = Article::with(['user','category']);
+        $articl_query = Article::with(['user','category','tag']);
 
-        if ($request->has('category_id')) {
-            $articl_query->where('category_id', $request->category_id);
+        if ($request->category) {
+            $articl_query->whereHas('category', function($articles) use($request){
+                $articles->where('name', $request->category);
+            });
         }
     
-        if ($request->has('tags')) {
-            $tags = explode(',', $request->tags);
-            $articl_query->whereHas('tags', function ($articl_query) use ($tags) {
-                $articl_query->whereIn('name', $tags);
+        if ($request->tag) {
+            $articl_query->whereHas('tag', function ($articles) use ($request) {
+                $articles->where('name', $request->tag);
             });
         }
     

@@ -7,6 +7,7 @@ use App\Http\Requests\StoreArticleRequest;
 use App\Http\Requests\UpdateArticleRequest;
 use App\Http\Resources\ArticleCollection;
 use App\Http\Resources\ArticleResource;
+use App\Models\Category;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 
@@ -37,8 +38,8 @@ class ArticleController extends Controller
      */
     public function store(StoreArticleRequest $request)
     {
+        $request['user_id'] = auth()->user()->id;
         $article = Article::create($request->all());
-
         
         // $article = Article::create([
         //     'title' => $request->title,
@@ -49,7 +50,7 @@ class ArticleController extends Controller
         //     // 'user_id' => auth()->user()->id,
 
         // ]);
-
+            
         return response()->json([
             'status' => true,
             'message' => "Article Created successfully!",
