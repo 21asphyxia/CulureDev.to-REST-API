@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Models\Tag;
 use App\Http\Requests\StoreArticleRequest;
 use App\Http\Requests\UpdateArticleRequest;
 use App\Http\Resources\ArticleCollection;
@@ -14,7 +15,7 @@ class ArticleController extends Controller
 {
     public function __construct()
     {
-        // $this->middleware('auth:api');
+        $this->middleware('auth:api');
     }
     
     /**
@@ -37,24 +38,32 @@ class ArticleController extends Controller
      */
     public function store(StoreArticleRequest $request)
     {
-        $article = Article::create($request->all());
-
+        // $article = Article::create($request->all());
         
-        // $article = Article::create([
-        //     'title' => $request->title,
-        //     'content' => $request->content,
-        //     'published_at' => $request->published_at,
-        //     'category_id' => $request->category_id,
-        //     // 'tag_id' => $request->tag_id,
-        //     // 'user_id' => auth()->user()->id,
+        $article = Article::create([
+            'title'       => $request->title,
+            'content'     => $request->content,
+            'category_id' => $request->category_id,
+            // 'tag_id'      => $request->tag_id,
+            'user_id'     => auth()->user()->id,
 
-        // ]);
+        ]);
+        $tags = $request->tags;
+        $tag_ids = [];
+        
+        foreach ($tags as $tag) {
+            $tag_model = Tag::firstOrCreate(['name' => $tag]);
+            $tag_ids[] = $tag_model->id;
+        }
+        
+        $article->tags()->sync($tag_ids);
 
         return response()->json([
-            'status' => true,
+            'status'  => true,
             'message' => "Article Created successfully!",
             'article' => $article
         ], 201);
+
     }
 
 

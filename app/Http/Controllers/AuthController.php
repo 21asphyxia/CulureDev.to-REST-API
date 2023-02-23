@@ -8,12 +8,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Services\EmailService;
+
 
 class AuthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register','forgetPassword','changePassword']]);
     }
 
     public function login(Request $request)
@@ -116,5 +118,77 @@ class AuthController extends Controller
         ]);
     }
 
-  }
+
+    public function forgetPassword(Request $request)
+        {
+            $user = $request->user();
+            if($request->isMethod('post')){
+                $request->validate([
+                    'email' => 'required|string|email',
+                ]);
+                $email = $request->email;
+                $user  = User::where('email', $email)->first();
+                if($user){
+                    $full_name        = $user->name;
+                    $activation_token = md5(uniqid()).$email.sha1($email);
+                    $emailresetpwd    = new EmailService;
+                    $subject          = "reset your password";
+                    $emailresetpwd->resetPassword($subject,$email,$full_name,true,$activation_token);
+                    $user = User::where('email', $email)->update(['rememberToken' => $activation_token ]);
+                    return response()->json([
+                                'status' => 'success',
+                                'message' => 'We have send an email vereification to your email please verify that',
+                                'name' => $full_name,
+                                'token' => $activation_token,
+
+                    ], 200);
+                }else{
+                    return response()->json([
+                        'status' => 'error',
+                        'message' => 'email doesn\'t exist',
+            ], 404);
+                }
+            }else{
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Invalid method',
+                ], 401);
+            }
+
+        }
+
+        public function changePassword(Request $request)
+        {
+            $user= $request->user();
+
+            if($request->isMethod('post')){
+                $request->validate([
+                    'password'         => 'required|min:8',
+                    'confirm_password' => 'required|min:8|same:password',
+                    'token'            => 'required'
+                ]);
+                $user = User::where('rememberToken', $request->token)->first();
+                if($user){
+                    $user->password = Hash::make($request->password);
+                    $user->save();
+                    return response()->json([
+                       'statuts' => 'success',
+                       'message' => 'your password has been updated successfuly',
+                    ],200);
+                }else{
+                    return response()->json([
+                        'status'  => 'error',
+                        'message' => 'you do not have permession to access into this page'
+                    ],401);
+                }
+            }else{
+                    return response()->json([
+                        'status'  => 'error',
+                        'message' => 'method not allowd'
+                    ],405);
+            }
+        }
+
+
+}
 
