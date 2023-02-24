@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('title', 30);
             $table->string('content');
-            $table->date('published_at');
 
             $table->foreignId('category_id')->references('id')->on('categories');
             
