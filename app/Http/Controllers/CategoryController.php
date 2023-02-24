@@ -10,6 +10,11 @@ use Illuminate\Http\Response;
 
 class CategoryController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Category::class, 'category');
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -35,6 +40,8 @@ class CategoryController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
+        // $this->authorize('create', Category::class);
+
         $category = Category::create($request->all());
 
         return response()->json([

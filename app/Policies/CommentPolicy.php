@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\Tag;
+use App\Models\Comment;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class TagPolicy
+class CommentPolicy
 {
     /**
      * Determine whether the user can view any models.
@@ -19,7 +19,7 @@ class TagPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Tag $tag): bool
+    public function view(User $user, Comment $comment): bool
     {
         return true;
     }
@@ -29,29 +29,29 @@ class TagPolicy
      */
     public function create(User $user): bool
     {
-        return $user->role->name === 'admin';
+        return true;
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Tag $tag): bool
+    public function update(User $user, Comment $comment): bool
     {
-        return $this->create($user);
+        return $user === $comment->user;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Tag $tag): bool
+    public function delete(User $user, Comment $comment): bool
     {
-        return $this->create($user);
+        return ($this->update($user, $comment) || $user->role->name === 'admin');
     }
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Tag $tag): bool
+    public function restore(User $user, Comment $comment): bool
     {
         //
     }
@@ -59,7 +59,7 @@ class TagPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Tag $tag): bool
+    public function forceDelete(User $user, Comment $comment): bool
     {
         //
     }

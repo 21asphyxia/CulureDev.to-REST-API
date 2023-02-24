@@ -14,6 +14,10 @@ class Comment extends Model
         'article_id'
     ];
 
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
     public function article(){
         return $this->hasOne(Article::class);
     }
