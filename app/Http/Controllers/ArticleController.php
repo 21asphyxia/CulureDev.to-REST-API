@@ -24,6 +24,23 @@ class ArticleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    /**
+     * @OA\Get(
+     *      path="/articles",
+     *      operationId="getArticlesList",
+     *      tags={"Articles"},
+     *      summary="Get list of articles",
+     *      security={{"bearer":{}}},
+     *      description="Returns list of articles",
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation"
+     *       )
+     *     )
+     * 
+     */
+
     public function index()
     {
         // $articles = Article::orderBy('id')->get();
