@@ -10,11 +10,18 @@ use Illuminate\Http\Response;
 
 class TagController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Tag::class, 'tag');
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+        $this->authorize('viewAny', Tag::class);
+
         $tags = Tag::all();
 
         return response()->json([
