@@ -8,6 +8,7 @@ use App\Http\Requests\StoreArticleRequest;
 use App\Http\Requests\UpdateArticleRequest;
 use App\Http\Resources\ArticleCollection;
 use App\Http\Resources\ArticleResource;
+use App\Models\Category;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 
@@ -39,7 +40,6 @@ class ArticleController extends Controller
      */
     public function store(StoreArticleRequest $request)
     {
-        // $article = Article::create($request->all());
         
         $article = Article::create([
             'title'       => $request->title,
@@ -47,7 +47,7 @@ class ArticleController extends Controller
             'category_id' => $request->category_id,
             'user_id'     => auth()->user()->id,
 
-        ]);
+]);
 
         $tags = $request->tags;
         $tag_ids = [];
@@ -61,9 +61,9 @@ class ArticleController extends Controller
 
         $article->tags()->sync($tag_ids);
         // Debugging statements
-    error_log('Tags: ' . print_r($tags, true));
-    error_log('Tag IDs: ' . print_r($tag_ids, true));
-    error_log('Article Tags: ' . print_r($article->tags, true));
+        error_log('Tags: ' . print_r($tags, true));
+        error_log('Tag IDs: ' . print_r($tag_ids, true));
+        error_log('Article Tags: ' . print_r($article->tags, true));
 
         return response()->json([
             'status'  => true,

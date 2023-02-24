@@ -3,6 +3,7 @@
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\ArticleController;
+use App\Http\Controllers\FilterController;
 use App\Http\Controllers\CommentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -43,4 +44,6 @@ Route::apiResource('categories', CategoryController::class);
 Route::apiResource('articles', ArticleController::class);
 Route::apiResource('comments', CommentController::class);
 
+
+Route::get('filter', [FilterController::class, 'filter']);
 
