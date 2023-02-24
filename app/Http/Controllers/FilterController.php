@@ -8,7 +8,7 @@ use App\Models\Article;
 class FilterController extends Controller
 {
     public function filter(Request $request){
-        $articl_query = Article::with(['user','category','tag']);
+        $articl_query = Article::with(['category','tags']);
 
         if ($request->category) {
             $articl_query->whereHas('category', function($articles) use($request){
@@ -17,7 +17,7 @@ class FilterController extends Controller
         }
     
         if ($request->tag) {
-            $articl_query->whereHas('tag', function ($articles) use ($request) {
+            $articl_query->whereHas('tags', function ($articles) use ($request) {
                 $articles->where('name', $request->tag);
             });
         }
