@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Models\Tag;
 use App\Http\Requests\StoreArticleRequest;
 use App\Http\Requests\UpdateArticleRequest;
 use App\Http\Resources\ArticleCollection;
@@ -24,7 +25,8 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $articles = Article::orderBy('id')->get();
+        // $articles = Article::orderBy('id')->get();
+        $articles = Article::with('tags')->orderBy('id')->get();
 
         return new ArticleCollection($articles);
     }
@@ -37,24 +39,38 @@ class ArticleController extends Controller
      */
     public function store(StoreArticleRequest $request)
     {
-        $article = Article::create($request->all());
-
+        // $article = Article::create($request->all());
         
-        // $article = Article::create([
-        //     'title' => $request->title,
-        //     'content' => $request->content,
-        //     'published_at' => $request->published_at,
-        //     'category_id' => $request->category_id,
-        //     // 'tag_id' => $request->tag_id,
-        //     // 'user_id' => auth()->user()->id,
+        $article = Article::create([
+            'title'       => $request->title,
+            'content'     => $request->content,
+            'category_id' => $request->category_id,
+            'user_id'     => auth()->user()->id,
 
-        // ]);
+        ]);
+
+        $tags = $request->tags;
+        $tag_ids = [];
+
+        if (is_array($tags)) {
+            foreach ($tags as $tag) {
+                $tag_model = Tag::firstOrCreate(['name' => $tag]);
+                $tag_ids[] = $tag_model->id;
+            }
+        }
+
+        $article->tags()->sync($tag_ids);
+        // Debugging statements
+    error_log('Tags: ' . print_r($tags, true));
+    error_log('Tag IDs: ' . print_r($tag_ids, true));
+    error_log('Article Tags: ' . print_r($article->tags, true));
 
         return response()->json([
-            'status' => true,
+            'status'  => true,
             'message' => "Article Created successfully!",
             'article' => $article
         ], 201);
+
     }
 
 

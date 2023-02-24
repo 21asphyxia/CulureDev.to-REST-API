@@ -29,6 +29,8 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('logout', 'logout');
     Route::post('refresh', 'refresh');
     Route::post('update', 'update');
+    Route::post('forget', 'forgetPassword');
+    Route::post('change', 'changePassword');
 });
 
 // Routes for usercontroller
@@ -40,4 +42,5 @@ Route::apiResource('tags', TagController::class);
 Route::apiResource('categories', CategoryController::class);
 Route::apiResource('articles', ArticleController::class);
 Route::apiResource('comments', CommentController::class);
+
 
