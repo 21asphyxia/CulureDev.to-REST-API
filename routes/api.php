@@ -7,6 +7,7 @@ use App\Http\Controllers\CommentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +31,10 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('update', 'update');
 });
 
+// Routes for usercontroller
+Route::get('users', [UserController::class, 'index']);
+Route::get('users/{user}', [UserController::class, 'show']);
+Route::put('users/{user}/role', [UserController::class, 'updateRole']);
 
 Route::apiResource('tags', TagController::class);
 Route::apiResource('categories', CategoryController::class);
