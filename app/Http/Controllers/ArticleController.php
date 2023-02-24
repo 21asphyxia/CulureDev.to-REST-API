@@ -25,7 +25,8 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        $articles = Article::orderBy('id')->get();
+        // $articles = Article::orderBy('id')->get();
+        $articles = Article::with('tags')->orderBy('id')->get();
 
         return new ArticleCollection($articles);
     }
@@ -58,7 +59,11 @@ class ArticleController extends Controller
             }
         }
 
-        $article->tags()->attach($tag_ids);
+        $article->tags()->sync($tag_ids);
+        // Debugging statements
+    error_log('Tags: ' . print_r($tags, true));
+    error_log('Tag IDs: ' . print_r($tag_ids, true));
+    error_log('Article Tags: ' . print_r($article->tags, true));
 
         return response()->json([
             'status'  => true,

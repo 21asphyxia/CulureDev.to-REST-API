@@ -14,14 +14,23 @@ class ArticleResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        // return [
+        //     'id' => $this->id,
+        //     'user_id' => $this->user_id,
+        //     'title' => $this->title,
+        //     'content' => $this->content,
+        //     'category' => new CategoryResource($this->category),
+        //     'comment' => new CommentCollection($this->comments),
+        //     'tags' => new TagCollection($this->tags)
+        // ];
         return [
-            'id' => $this->id,
-            'user_id' => $this->user_id,
-            'title' => $this->title,
-            'content' => $this->content,
+            'id'       => $this->id,
+            'user_id'  => $this->user_id,
+            'title'    => $this->title,
+            'content'  => $this->content,
             'category' => new CategoryResource($this->category),
-            'comment' => new CommentCollection($this->comments),
-            'tag' => new TagCollection($this->tags)
+            'comment'  => new CommentCollection($this->comments),
+            'tags'     => new TagCollection($this->whenLoaded('tags')),
         ];
     }
 }
